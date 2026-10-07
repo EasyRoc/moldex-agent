@@ -1,0 +1,46 @@
+# Moldex profile composition: activates the Moldex account provider and
+# gateway route, replacing the DeepSeek account chain. Local file, gitignored.
+#
+# Usage (CLI): pnpm dsh --profile headless --patch moldex-profile.patch.yml "task"
+# Desktop / Web GUI (same bundle as web):
+#   pnpm --filter @deepseek-ai/dsh-client-ui-account-moldex bundle && pnpm run build
+#   pnpm dsh desktop --patch moldex-profile.patch.yml
+#   — or copy this file to $DSH_HOME/profiles/web/cordis.patch.yml and start desktop/web.
+# If your profile already registers provider "moldex" via llm-pi-ai, disable that row or omit
+# the llm-openai-compatible insert below to avoid duplicate provider registration.
+
+# Disable the DeepSeek account chain and its exclusive consumers.
+- id: deepseek-account
+  disabled: true
+- id: llm-deepseek-account
+  disabled: true
+- id: llm-deepseek
+  disabled: true
+- id: web-search-deepseek
+  disabled: true
+- id: product-analytics
+  disabled: true
+
+# Activate the Moldex gateway route (Phase 1) and account provider (Phase 2).
+- insert:
+  - id: llm-openai-compatible
+    name: '@deepseek-ai/dsh-llm-openai-compatible'
+    config:
+      baseURL: https://api.moldex.top/v1
+      provider: moldex
+      displayName: Moldex
+      apiKeyEnv: MOLDEX_API_KEY
+      streamUsage: false
+      requireAccountSession: true
+      models: []
+  - id: moldex-account
+    name: '@deepseek-ai/dsh-moldex-account'
+    config:
+      accountOrigin: https://www.moldex.top
+      apiKeyEnv: MOLDEX_API_KEY
+
+# Point the default model at the Moldex route.
+- id: agent-default-model
+  config:
+    provider: moldex
+    model: glm-5.3-flash

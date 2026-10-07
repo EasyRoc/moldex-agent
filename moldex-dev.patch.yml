@@ -1,0 +1,16 @@
+# Local, gitignored: points one headless run at the Moldex gateway.
+- id: llm-openai-compatible
+  name: '@deepseek-ai/dsh-llm-openai-compatible'
+  config:
+    baseURL: https://api.moldex.top/v1
+    provider: moldex
+    displayName: Moldex
+    apiKeyEnv: MOLDEX_API_KEY
+    streamUsage: false
+    requireAccountSession: true
+    models: []
+- id: agent-default-model
+  name: '@deepseek-ai/dsh-agent-default-model'
+  config:
+    provider: moldex
+    model: glm-5.3-flash

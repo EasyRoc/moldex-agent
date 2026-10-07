@@ -34,7 +34,10 @@ export function SignInDialog({ account, colorScheme, start, cancel, close, useAp
   if (isFormBasedSignInAttempt(account.view)) return null
   const active = busy || phase === 'initializing' || phase === 'waiting-browser' || phase === 'exchanging' || phase === 'committing'
   const expired = phase === 'expired'
-  const error = failed || account.loginFailed || account.failed || phase === 'failed'
+  const localFailure = failed || account.loginFailed || account.failed
+  const error = localFailure || phase === 'failed'
+  const failureKey = !localFailure
+    && phase === 'failed' && attempt?.errorCode === 'no-response' ? 'noResponse' : 'failed'
   const waiting = active && !error
   const committing = phase === 'committing'
   useEffect(() => { if (account.view?.status === 'credential-stored') close() }, [account.view?.status, close])
@@ -73,7 +76,7 @@ export function SignInDialog({ account, colorScheme, start, cancel, close, useAp
           {t(copyResult?.messageKey ?? 'copyLink')}
         </button>{t('browserDescription')}
       </p> : <p className={css.description}>
-        {error ? t('failed') : expired ? t('timeoutDescription') : t('loginDescription')}
+        {error ? t(failureKey) : expired ? t('timeoutDescription') : t('loginDescription')}
       </p>}
     </div>
     <div className={css.actions}>

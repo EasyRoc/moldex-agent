@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/zhouqiantalaogong/GolandProjects/deepseek-harness -name \"*.html\" -o -name \"vite.config*\" -o -name \"next.config*\" | head -20)",
+      "Bash(cd /Users/zhouqiantalaogong/GolandProjects/deepseek-harness && grep -r \"web\" packages/examples --include=\"*.json\" -l 2>/dev/null | head -10)",
+      "Bash(cd /Users/zhouqiantalaogong/GolandProjects/deepseek-harness && grep -r \"\\\\\"web\\\\\"\" packages --include=\"*.ts\" -l | head -10)",
+      "Bash(cd /Users/zhouqiantalaogong/GolandProjects/deepseek-harness && cat packages/examples/agent-spine-demo/package.json)"
+    ]
+  }
+}
